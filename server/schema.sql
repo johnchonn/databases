@@ -1,10 +1,38 @@
+DROP DATABASE chat;
+
 CREATE DATABASE chat;
 
 USE chat;
 
-CREATE TABLE messages (
-  /* Describe your table here.*/
+CREATE TABLE users (
+  id INT NOT NULL AUTO_INCREMENT,
+  username VARCHAR(255),
+  firstuse date,
+  location VARCHAR(255),
+  PRIMARY KEY(id)
 );
+
+CREATE TABLE messages (
+  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  userID INT NOT NULL,
+  message VARCHAR(255),
+  date date,
+  room VARCHAR(255),
+  PRIMARY KEY(id),
+  FOREIGN KEY (userID) REFERENCES users(id)
+);
+
+
+--   messages
+-- id int
+-- date and time -> date
+-- message varchar(255)
+-- room name varchar
+
+--   users
+-- id int
+-- firstuse date time?
+
 
 /* Create other tables and define schemas for them here! */
 
