@@ -21,9 +21,14 @@ app.use(express.json());
 
 // Set up our routes
 app.use('/classes', router);
+// http://expressjs.com/en/guide/using-middleware.html
 
 // Serve the client files
 app.use(express.static(__dirname + '/../client'));
+/*
+Serving static files in Express
+To serve static files such as images, CSS files, and JavaScript files, use the express.static built-in middleware function in Express.
+*/
 
 // If we are being run directly, run the server.
 if (!module.parent) {

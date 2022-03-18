@@ -2,6 +2,7 @@
  * for these tests to pass. */
 
 const mysql = require('mysql2');
+// https://github.com/mysqljs/mysql#performing-queries
 const axios = require('axios');
 const chai = require('chai');
 
@@ -31,13 +32,13 @@ describe('Persistent Node Chat Server', () => {
 
   it('Should insert posted messages to the DB', (done) => {
     const username = 'Valjean';
-    const message = 'In mercy\'s name, three days is all I need.';
+    const text = 'In mercy\'s name, three days is all I need.';
     const roomname = 'Hello';
     // Create a user on the chat server database.
     axios.post(`${API_URL}/users`, { username })
       .then(() => {
         // Post a message to the node chat server:
-        return axios.post(`${API_URL}/messages`, { username, message, roomname });
+        return axios.post(`${API_URL}/messages`, { username, text, roomname });
       })
       .then(() => {
         // Now if we look in the database, we should find the posted message there.
@@ -47,15 +48,17 @@ describe('Persistent Node Chat Server', () => {
         const queryString = 'SELECT * FROM messages';
         const queryArgs = [];
 
+        // query(obj, paramsArray, cb)
         dbConnection.query(queryString, queryArgs, (err, results) => {
           if (err) {
             throw err;
           }
           // Should have one result:
+
           expect(results.length).toEqual(1);
 
           // TODO: If you don't have a column named text, change this test.
-          expect(results[0].text).toEqual(message);
+          expect(results[0].message).toEqual(text);
           done();
         });
       })
@@ -64,9 +67,9 @@ describe('Persistent Node Chat Server', () => {
       });
   });
 
-  it('Should output all messages from the DB', (done) => {
+  it('Should output all messages from the DB', (done) => { // ``
     // Let's insert a message into the db
-    const queryString = '';
+    const queryString = 'INSERT INTO messages (userID, message, date, room) VALUES (2, "dfghlo", curdate(), "gmail")'; // insert message
     const queryArgs = [];
     /* TODO: The exact query string and query args to use here
      * depend on the schema you design, so I'll leave them up to you. */
